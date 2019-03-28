@@ -1,0 +1,8 @@
+/.settings
+/.wikiReport
+/build
+/target
+.classpath
+.project
+node_modules
+dist
