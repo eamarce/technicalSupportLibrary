@@ -13,3 +13,7 @@ While running and the support is enabled through the library we want to enable t
 Use and more information can be found in the following blog post:
 
 https://blogs.sap.com/2019/04/20/taking-user-experience-one-step-further-a-support-library-for-sapui5fiori-apps/
+
+Example implementation: 
+
+For an example of implementation, pleae take a look at Component.js and S2_ProductList.controller in the example project.
