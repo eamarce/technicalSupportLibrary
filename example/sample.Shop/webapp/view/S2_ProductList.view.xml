@@ -1,0 +1,136 @@
+<mvc:View id="S2_ProductListView" controllerName="nw.epm.refapps.shop.controller.S2_ProductList" xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:l="sap.ui.layout" xmlns="sap.m" xmlns:f="sap.f"
+	xmlns:smartvariants="sap.ui.comp.smartvariants">
+	<f:DynamicPage id="productListPage" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<!-- DynamicPage Title -->
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<smartvariants:SmartVariantManagement id="smartVariant" persistencyKey="nw.epm.refapps.shop.variants" showShare="false"
+						showExecuteOnSelection="true"/>
+				</f:heading>
+				<f:actions>
+					<Button id="productListHeaderButton" binding="{/ShoppingCarts(-1)}" icon="sap-icon://cart" press="onShoppingCartPressed"
+						text="{TotalQuantity}" tooltip="{i18n>xfld.addToCart}" type="Transparent"/>
+				</f:actions>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader id="productListPageHeader" pinnable="true">
+				<f:content>
+					<core:Fragment fragmentName="nw.epm.refapps.shop.view.fragment.SmartFilterBar" type="XML"/>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<!-- the smart filter bar is added later by the controller (S2_ProductList.controller.js) if not running on a phone-->
+			<!-- the count mode on the item binding is set to obtain the $count information for the item collection-->
+			<Table id="catalogTable" class="sapUiForceWidthAuto sapUiResponsiveMargin" width="auto" mode="MultiSelect" updateFinished="onUpdateFinished"
+				items="{path: '/Products', templateShareable: false, sorter: {path: 'Name', descending: false}, groupHeaderFactory: '.createGroupHeader', parameters: {countMode: 'Inline', select: 'StockQuantity,Id,ImageUrl,Name,Description,AverageRating,RatingCount,Price,CurrencyCode,IsFavoriteOfCurrentUser,SupplierName,SubCategoryName,MainCategoryName'}}"
+				growing="true" growingScrollToLoad="true" noDataText="{i18n>xfld.noDataProducts}" selectionChange="onItemSelected">
+				<headerToolbar>
+					<OverflowToolbar id="tableToolbar">
+						<Title id="catalogTitle" text="{productListView>/catalogTitle}"/>
+						<ToolbarSpacer id="toolbarSpacer"/>
+						<Button id="addItemsToCartButton" text="{productListView>/addItemsToCartText}" press="onAddItemsToCartPressed"
+							enabled="{productListView>/hasSelectedItems}" type="Transparent"/>
+						<Button id="openItemsButton" text="{productListView>/openLinkText}" press="onOpenItemsPressed" enabled="{productListView>/hasSelectedItems}"
+							type="Transparent"/>
+						<OverflowToolbarButton id="sortButton" icon="sap-icon://sort" text="{i18n>xbut.sort}" tooltip="{i18n>xbut.sort}" press="onSortPressed"/>
+						<OverflowToolbarButton id="groupButton" icon="sap-icon://group-2" text="{i18n>xbut.group}" tooltip="{i18n>xbut.group}"
+							press="onGroupPressed"/>
+						<OverflowToolbarButton id="personalizationButton" enabled="{productListView>/personalizationActive}" text="{i18n>xbut.personalization}"
+							tooltip="{i18n>xbut.personalization}" icon="sap-icon://action-settings" press="onPersonalizationPressed"/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<!-- Columns must have unique IDs because table personalization service is used -->
+					<!-- Columns of reseponsive table should have class="sapMTableContentMargin" assigned as default-->
+					<!-- Favorite -->
+					<Column id="favoriteColumn" width="4%" minScreenWidth="Tablet" hAlign="Center" class="sapMTableContentMargin">
+						<header>
+							<!-- even though the column title is invisible on the table it needs to be set because it is used by the personalization-->
+							<Label id="favoriteLabel" text="{/#Product/IsFavoriteOfCurrentUser/@sap:label}" visible="false"/>
+						</header>
+					</Column>
+					<!-- Picture -->
+					<Column id="pictureColumn" width="{= !${device>/system/phone}? '9%' : '5rem'}" hAlign="Left" class="sapMTableContentMargin">
+						<header>
+							<Label id="imageLabel" text="{/#Product/ImageUrl/@sap:label}" visible="false"/>
+						</header>
+					</Column>
+					<!-- Name + Availability -->
+					<Column id="nameAvailabilityColumn" width="{= !${device>/system/phone}? '20%' : '80%'}" hAlign="Left" class="sapMTableContentMargin">
+						<header>
+							<Label id="availabiltyLabel" text="{/#Product/Name/@sap:label}" visible="{= !${device>/system/phone}}"/>
+						</header>
+					</Column>
+					<!-- Description -->
+					<Column id="descriptionColumn" width="25%" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" hAlign="Left"
+						class="sapMTableContentMargin">
+						<header>
+							<Label id="descriptionLabel" text="{/#Product/Description/@sap:label}"/>
+						</header>
+					</Column>
+					<!-- AverageRating & RatingCount -->
+					<Column id="ratingColumn" width="16%" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline" hAlign="Left"
+						class="sapMTableContentMargin">
+						<header>
+							<Label id="ratingLabel" text="{/#Product/AverageRating/@sap:label}"/>
+						</header>
+					</Column>
+					<!-- Price -->
+					<Column id="priceColumn" width="10%" minScreenWidth="Desktop" demandPopin="true" popinDisplay="Inline" hAlign="Right"
+						class="sapMTableContentMargin">
+						<header>
+							<Label id="priceLabel" text="{/#Product/Price/@sap:label}"/>
+						</header>
+					</Column>
+					<!-- Add Button -->
+					<Column id="buttonColumn" width="15%" minScreenWidth="Tablet" demandPopin="true" popinDisplay="WithoutHeader" hAlign="Right"
+						class="sapMTableContentMargin">
+						<header>
+							<Label id="addToCartLabel" text="{i18n>xfld.addToCart}" visible="{= ${device>/system/phone}}"/>
+						</header>
+					</Column>
+				</columns>
+				<ColumnListItem id="columnListItem" vAlign="Middle" type="Navigation" press="onLineItemPressed">
+					<cells>
+						<!-- Favorite -->
+						<ObjectMarker id="favoriteMarker" type="Favorite" visible="{IsFavoriteOfCurrentUser}"/>
+						<!-- Picture -->
+						<l:HorizontalLayout id="pictureLayout">
+							<Image id="imageImage" src="{ImageUrl}" densityAware="false" width="3rem" height="3rem" visible="{= !!${ImageUrl} }"
+								backgroundPosition="center center" backgroundSize="contain" mode="Background" alt="{i18n>xfld.productImage}" decorative="false"
+								class="sapUiSmallMarginTopBottom"/>
+							<core:Icon id="fallbackIcon" src="sap-icon://product" alt="{i18n>xfld.productImage}" size="3rem" class="sapThemeHighlight-asColor"
+								visible="{= !${ImageUrl} }"/>
+						</l:HorizontalLayout>
+						<!-- Name + Availability -->
+						<l:VerticalLayout id="nameAvailabilityVerticalLayout" width="100%">
+							<ObjectIdentifier id="availabilityNameObjectIdentifier" title="{Name}"/>
+							<ObjectStatus id="availabilityStockQuantityObjectStatus" text="{path: 'StockQuantity', formatter: '.formatterReuse.formatAvailabilityText'}"
+								state="{path: 'StockQuantity', formatter: '.formatterReuse.formatAvailabilityStatus'}"/>
+						</l:VerticalLayout>
+						<!-- Description -->
+						<Text id="desctiptionText" text="{Description}" maxLines="2"/>
+						<!-- AverageRating & RatingCount -->
+						<l:HorizontalLayout >
+							<RatingIndicator id="ratingIndicator"
+								value="{path: 'AverageRating', type: 'sap.ui.model.odata.type.Decimal', formatOptions: { parseAsString: true, maxIntegerDigits: 2, maxFractionDigits: 2} }"
+								iconSize="1rem" class="sapUiTinyMarginTop"/>
+							<Label id="ratingCount"
+								text="{path: 'RatingCount', type : 'sap.ui.model.type.Float', constraints : { minimum: 0, maximum: 9999999999 }, formatOptions: { parseAsString: true, maxIntegerDigits: 10, maxFractionDigits: 3 }, formatter: '.formatter.ratingNumber'}"
+								class="sapUiTinyMarginTop"/>
+						</l:HorizontalLayout>
+						<ObjectNumber id="priceObjectNumber"
+							number="{parts: [ {path: 'Price'}, {path: 'CurrencyCode'}], type : 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"
+							unit="{CurrencyCode}"/>
+						<!-- Add Button -->
+						<Button id="addToCartButton" text="{i18n>xbut.addToCart}" press="onAddToCartPressed" type="Transparent"/>
+					</cells>
+				</ColumnListItem>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

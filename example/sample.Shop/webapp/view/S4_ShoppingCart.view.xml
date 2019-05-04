@@ -1,0 +1,118 @@
+<mvc:View id="S4_ShoppingCartView" controllerName="nw.epm.refapps.shop.controller.S4_ShoppingCart" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" xmlns:uxap="sap.uxap" xmlns="sap.m">
+	<uxap:ObjectPageLayout id="shoppingCartPage" alwaysShowContentHeader="true" showFooter="true" busy="{shoppingCartView>/busy}"
+		busyIndicatorDelay="0">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader id="shoppingCartObjectPageHeader" objectTitle="{i18n>xtit.yourCart}"
+				binding="{path: '/ShoppingCarts(-1)', parameters: { select: 'Total,CurrencyCode,TotalQuantity'}}">
+				<uxap:actions>
+					<uxap:ObjectPageHeaderActionButton id="continueShoppingButton" hideText="false" text="{i18n>xbut.continueShopping}"
+						press="onContinueShoppingPressed"/>
+				</uxap:actions>
+			</uxap:ObjectPageHeader>
+		</uxap:headerTitle>
+		<uxap:headerContent id="shoppingCartHeaderContent">
+			<core:Icon id="shoppingCartIcon" height="3rem" size="3rem" src="sap-icon://cart" alt="{i18n>xfld.keyWord2}"/>
+			<l:VerticalLayout id="totalAmount">
+				<Label id="totalAmountLabel" text="{i18n>xtit.totalAmount}"/>
+				<ObjectNumber id="totalObjNumber"
+					number="{parts: [{path: '/ShoppingCarts(-1)/Total'},{path: '/ShoppingCarts(-1)/CurrencyCode'}], type : 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"
+					unit="{/ShoppingCarts(-1)/CurrencyCode}"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="numberOfItems">
+				<Label id="numberOfItemsLabel" text="{i18n>xtit.numberOfItems}"/>
+				<ObjectNumber id="totalQuantityObjNumber"
+					number="{parts: [{path: '/ShoppingCarts(-1)/TotalQuantity'}], type : 'sap.ui.model.type.Integer', formatOptions: { showMeasure: false } }"/>
+			</l:VerticalLayout>
+		</uxap:headerContent>
+		<uxap:sections>
+			<uxap:ObjectPageSection showTitle="false" title="{i18n>xtit.yourCart}" id="yourCart">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection >
+						<uxap:blocks>
+							<Table id="shoppingCartTable" delete="onDeletePressed" growing="true" growingScrollToLoad="true"
+								items="{path: '/ShoppingCarts(-1)/ShoppingCartItems', templateShareable: false, sorter: { path: 'Id', descending: false}, parameters: {expand: 'Product', select: 'Quantity,SubTotal,CurrencyCode,ProductId,Product/IsFavoriteOfCurrentUser,Product/ImageUrl,Product/Name,Product/StockQuantity,Product/Price,Product/CurrencyCode'}}"
+								mode="Delete" noDataText="{i18n>xfld.noDataShoppingCart}" updateFinished="onUpdateFinished"
+								class="sapUiForceWidthAuto sapUiResponsiveMargin" width="auto" ariaLabelledBy="yourCart">
+								<columns>
+									<!-- Favorite -->
+									<Column id="favoriteColumn" hAlign="Left" minScreenWidth="Tablet" width="6%" class="sapMTableContentMargin"/>
+									<!-- Picture -->
+									<Column id="pictureColumn" hAlign="Left" width="{= ${device>/system/phone}? '14%' : '11%'}" class="sapMTableContentMargin">
+										<header>
+											<Label id="itemsLabel" text="{/#Product/ImageUrl/@sap:label}" visible="false"/>
+										</header>
+									</Column>
+									<!-- Name + Availability -->
+									<Column id="availabilityColumn" hAlign="Left" width="28%" class="sapMTableContentMargin">
+										<header>
+											<Label id="availabilityLabel" text="{/#Product/Name/@sap:label}" visible="{= !${device>/system/phone}}"/>
+										</header>
+									</Column>
+									<!-- Quantity -->
+									<Column id="quantityColumn" hAlign="Right" demandPopin="true" minScreenWidth="Tablet" popinDisplay="Block" width="14%"
+										class="sapMTableContentMargin">
+										<header>
+											<Label id="quantityLabel" text="{/#ShoppingCartItem/Quantity/@sap:label}"/>
+										</header>
+									</Column>
+									<!-- Unit Price -->
+									<Column id="priceColumn" hAlign="Right" demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="18%"
+										class="sapMTableContentMargin">
+										<header>
+											<Label id="priceLabel" text="{/#Product/Price/@sap:label}"/>
+										</header>
+									</Column>
+									<!-- Subtotal -->
+									<Column id="subTotalColumn" hAlign="Right" demandPopin="true" minScreenWidth="Tablet" popinDisplay="Inline" width="23%"
+										class="sapMTableContentMargin">
+										<header>
+											<Label id="subTotalLabel" text="{/#ShoppingCartItem/SubTotal/@sap:label}"/>
+										</header>
+									</Column>
+								</columns>
+								<ColumnListItem press="onLineItemPressed" type="Navigation" vAlign="Middle">
+									<cells>
+										<!-- Favorite -->
+										<ObjectMarker id="favoriteMarker" type="Favorite" visible="{Product/IsFavoriteOfCurrentUser}"/>
+										<!-- Picture -->
+										<l:HorizontalLayout id="pictureLayout">
+											<Image id="imageImage" alt="{i18n>xfld.productImage}" class="sapUiSmallMarginTopBottom" decorative="false" densityAware="false"
+												height="3rem" src="{Product/ImageUrl}" visible="{= !!${Product/ImageUrl} }" width="3rem" backgroundPosition="center center"
+												backgroundSize="contain" mode="Background"/>
+											<core:Icon id="fallbackIcon" alt="{i18n>xfld.productImage}" class="sapThemeHighlight-asColor" size="3rem" src="sap-icon://product"
+												visible="{= !${Product/ImageUrl} }"/>
+										</l:HorizontalLayout>
+										<!-- Name + Availability -->
+										<l:VerticalLayout id="availabilityVerticalLayout" width="100%">
+											<ObjectIdentifier id="availabilityObjectIdentifier" title="{Product/Name}"/>
+											<ObjectStatus id="availabilityObjectStatus" text="{path: 'Product/StockQuantity', formatter: '.formatterReuse.formatAvailabilityText'}"
+												state="{path: 'Product/StockQuantity', formatter: '.formatterReuse.formatAvailabilityStatus'}"/>
+										</l:VerticalLayout>
+										<!-- Quantity -->
+										<Input id="quantityInput" ariaLabelledBy="quantityLabel" change="onQuantityChanged" maxLength="3" textAlign="End" type="Number"
+											value="{path: 'Quantity', type: 'sap.ui.model.type.Integer'}" valueStateText="{i18n>ymsg.errorInvalidNumber}"/>
+										<!-- Unit Price -->
+										<ObjectNumber id="priceObjNumber" emphasized="false"
+											number="{parts: [ {path: 'Product/Price'}, {path: 'Product/CurrencyCode'}], type : 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"
+											unit="{Product/CurrencyCode}"/>
+										<!-- Subtotal -->
+										<ObjectNumber id="subTotalObjNumber"
+											number="{parts: [ {path: 'SubTotal'}, {path: 'CurrencyCode'}], type : 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"
+											unit="{CurrencyCode}"/>
+									</cells>
+								</ColumnListItem>
+							</Table>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+		<uxap:footer>
+			<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Button id="checkOutButton" enabled="false" press="onCheckoutButtonPressed" text="{i18n>xbut.goToCheckout}" type="Emphasized"/>
+			</OverflowToolbar>
+		</uxap:footer>
+	</uxap:ObjectPageLayout>
+</mvc:View>

@@ -1,0 +1,37 @@
+{
+	"cacheControl": 
+	[
+		{
+			"maxAge": 86400
+		}
+	],
+
+	"routes": 
+	[
+		{
+			"path": "/sap/opu/odata",
+			"target": 
+			{
+				"type": "destination",
+				"name": "SAP_Gateway",
+				"entryPath": "/sap/opu/odata/"
+			},
+
+			"description": "OData server"
+		},
+
+		{
+			"path": "/sap/public/bc/NWDEMO_MODEL",
+			"target": {
+				"type": "destination",
+				"name": "SAP_Gateway",
+				"entryPath": "/sap/public/bc/NWDEMO_MODEL",
+				"preferLocal": true
+			},
+
+			"description": "EPM Mime Picture Service"
+		}
+
+
+	]
+}

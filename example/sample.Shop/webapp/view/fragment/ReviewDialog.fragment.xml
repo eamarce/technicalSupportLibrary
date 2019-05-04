@@ -1,0 +1,31 @@
+<core:FragmentDefinition id="reviewDialogFragment" xmlns="sap.m" xmlns:l="sap.ui.layout"
+	xmlns:core="sap.ui.core">
+	<Dialog id="reviewDialog" contentWidth="40%" contentHeight="450px"
+		showHeader="false" title="{i18n>xtit.myReview}">
+		<content>
+			<Bar id="reviewDialogHeaderBar" design="Header">
+				<contentMiddle>
+					<Title id="reviewDialogTitle" text="{i18n>xtit.myReview}" />
+				</contentMiddle>
+				<contentRight>
+					<Button id="reviewDeleteButton" icon="sap-icon://delete" press="onReviewDialogDeletePressed" tooltip="{i18n>xlnk.deleteReview}"/>
+				</contentRight>
+			</Bar>
+			<l:Grid id="reviewGrid" vSpacing="1" defaultIndent="L1 M0 S0" defaultSpan="L10 M12 S12">
+				<RatingIndicator id="ratingIndicator" maxValue="5" visualMode="Full"
+					value="{Rating}" iconSize="2.2rem" change="onRatingChanged"
+					class="sapUiMediumMarginEnd sapUiMediumMarginTop" />
+				<!-- set width (see defaultSpan) to 11/12 ~= 91% -->
+				<TextArea id="textArea" rows="12" width="100%" value="{Comment}"
+					placeholder="{i18n>xtxt.writeAReview}" liveChange="onTextAreaChanged" />
+			</l:Grid>
+		</content>
+		<beginButton>
+			<Button id="okButton" text="{i18n>xbut.ok}" press="onReviewDialogOKPressed"
+				enabled="false" />
+		</beginButton>
+		<endButton>
+			<Button id="cancelButton" text="{i18n>xbut.cancel}" press="onReviewDialogCancelPressed" />
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

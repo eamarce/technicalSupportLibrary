@@ -1,0 +1,8 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:footerbar="sap.ushell.ui.footerbar">
+	<ActionSheet id="shareSheet" placement="VerticalPreferedBottom">
+		<buttons>
+			<Button id="shareEmailButton"  icon="sap-icon://email" text="{i18n>xbut.email}" press="onEmailPressed" />
+			<footerbar:AddBookmarkButton id="bookmarkButton"  title="{Name}" subtitle="{Id}" />
+		</buttons>
+	</ActionSheet>	
+</core:FragmentDefinition>

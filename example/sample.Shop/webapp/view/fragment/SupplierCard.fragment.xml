@@ -1,0 +1,16 @@
+<core:FragmentDefinition id="supplierCardFragment" xmlns:core="sap.ui.core" xmlns="sap.m">
+	<QuickView id="companyQuickView" placement="Auto">
+		<QuickViewPage description="{FormattedContactName}" header="{i18n>xtit.supplier}" icon="sap-icon://account" id="supplierCard" title="{Name}">
+			<QuickViewGroup heading="{i18n>xtit.contactDetails}">
+				<QuickViewGroupElement id="supplierPhone" label="{/#Supplier/Phone/@sap:label}" type="phone" value="{Phone}"/>
+				<QuickViewGroupElement id="supplierAddress" label="{/#Supplier/FormattedAddress/@sap:label}" value="{FormattedAddress}"/>
+			</QuickViewGroup>
+			<QuickViewGroup heading="{i18n>xtit.mainContact}">
+				<QuickViewGroupElement id="supplierContactName" label="{/#Supplier/FormattedContactName/@sap:label}" value="{FormattedContactName}"/>
+				<QuickViewGroupElement id="supplierContactPhone2" label="{/#Supplier/ContactPhone2/@sap:label}" type="mobile" value="{ContactPhone2}"/>
+				<QuickViewGroupElement id="supplierContactPhone1" label="{/#Supplier/ContactPhone1/@sap:label}" type="phone" value="{ContactPhone1}"/>
+				<QuickViewGroupElement id="supplierContactEmail" label="{/#Supplier/ContactEmail/@sap:label}" type="email" value="{ContactEmail}"/>
+			</QuickViewGroup>
+		</QuickViewPage>
+	</QuickView>
+</core:FragmentDefinition>

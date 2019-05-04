@@ -1,0 +1,109 @@
+{
+	"routes": [ {
+		"path": "/sap/opu/odata",
+		"target": {
+			"type": "destination",
+			"name": "RefAppsBackend",
+			"entryPath": "/sap/opu/odata"
+		},
+		"description": "Backend OData services"
+	}, {
+		"path": "/sap/public/bc/NWDEMO_MODEL",
+		"target": {
+			"type": "destination",
+			"name": "RefAppsBackend",
+			"entryPath": "/sap/public/bc/NWDEMO_MODEL",
+			"preferLocal": true
+		},
+		"description": "EPM mime picture service"
+	}, {
+		"path": "/sap/bc/lrep/",
+		"target": {
+			"type": "destination",
+			"name": "RefAppsBackend",
+			"entryPath": "/sap/bc/lrep/"
+		},
+		"description": "LRep support: calls to same backend"
+	}, {
+		"path": "/webapp/Component-changes.json",
+		"target": {
+			"type": "destination",
+			"name": "RefAppsBackend",
+			"entryPath": "/sap/bc/ui5_ui5/sap/epmra_shop/Component-changes.json"
+		},
+		"description": "Component-changes.json"
+	}, {
+		"path": "Component-changes.json",
+		"target": {
+			"type": "destination",
+			"name": "RefAppsBackend",
+			"entryPath": "/sap/bc/ui5_ui5/sap/epmra_shop/Component-changes.json"
+		},
+		"description": "Component-changes.json"
+	}, {
+		"path": "/webapp/resources",
+		"target": {
+			"type": "application",
+			"name": "sapui5preview",
+			"entryPath": "/resources"
+		},
+		"description": "SAPUI5 Resources"
+	}, {
+		"path": "/webapp/resources",
+		"target": {
+			"type": "service",
+			"name": "sapui5",
+			"entryPath": "/resources"
+		},
+		"description": "SAPUI5 Resources"
+	}, {
+		"path": "/webapp/test-resources",
+		"target": {
+			"type": "application",
+			"name": "sapui5preview",
+			"entryPath": "/test-resources"
+		},
+		"description": "SAPUI5 Test Resources"
+	}, {
+		"path": "/webapp/test-resources",
+		"target": {
+			"type": "service",
+			"name": "sapui5",
+			"entryPath": "/test-resources"
+		},
+		"description": "SAPUI5 Test Resources"
+	}, {
+		"path": "/resources",
+		"target": {
+			"type": "application",
+			"name": "sapui5preview",
+			"entryPath": "/resources"
+		},
+		"description": "SAPUI5 Resources"
+	}, {
+		"path": "/resources",
+		"target": {
+			"type": "service",
+			"name": "sapui5",
+			"entryPath": "/resources"
+		},
+		"description": "SAPUI5 Resources"
+	}, {
+		"path": "/test-resources",
+		"target": {
+			"type": "application",
+			"name": "sapui5preview",
+			"entryPath": "/test-resources"
+		},
+		"description": "SAPUI5 Test Resources"
+	}, {
+		"path": "/test-resources",
+		"target": {
+			"type": "service",
+			"name": "sapui5",
+			"entryPath": "/test-resources"
+		},
+		"description": "SAPUI5 Test Resources"
+	}],
+	"headerWhiteList": ["X-UI5-Component"]
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<library xmlns="http://www.sap.com/sap.ui.library.xsd">
+    <name>com.support.technicalsupportlibrary</name>
+    <vendor>SAP SE</vendor>
+    <version>${version}</version>
+    <copyright>${copyright}</copyright>
+    <title>>{{title}}</title>
+    <documentation>A library to provide data context and information when a SAPUI5 library fails</documentation>
+	<appData>
+	    <manifest xmlns="http://www.sap.com/ui5/buildext/manifest" >
+	        <i18n> messagebundle.properties</i18n>
+	        <offline>false</offline>
+	        <deviceTypes desktop="true" phone="true" tablet="true" />
+            <supportedTheme>sap_hcb</supportedTheme>
+            <supportedTheme>sap_belize</supportedTheme>
+            <supportedTheme>sap_belize_plus</supportedTheme>
+	        	<contentDensities cozy="false" compact="true" />
+	        <sap.fiori>
+	            <registrationId></registrationId>
+	            <archeType>reusecomponent</archeType>
+	        </sap.fiori>
+	        <sap.platform.abap>
+	            <uri>/sap/bc/ui5_ui5/sap/undefined</uri>
+	        </sap.platform.abap>
+	        <sap.platform.hcp>
+	            <uri></uri>
+	        </sap.platform.hcp>
+	    </manifest>
+	    <ownership xmlns="http://www.sap.com/ui5/buildext/ownership">
+	        <component></component>
+	    </ownership>
+  </appData>
+
+	<dependencies>
+		<dependency>
+			<libraryName>sap.ui.core</libraryName>
+		</dependency>
+	</dependencies>
+</library>

@@ -1,0 +1,13 @@
+<core:FragmentDefinition id="reviewRatingFragment" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns="sap.m">
+	<Popover id="reviewRatingPopover" showHeader="false" placement="Auto">
+		<content>
+			<l:VerticalLayout content="{path: 'ReviewAggregates', sorter: {path: 'Rating', descending: true}}" id="reviewRatingList">
+				<l:HorizontalLayout>
+					<RatingIndicator id="ratingIndicator" class="sapUiTinyMarginTop" value="{Rating}" iconSize="1rem"/>
+					<Label id="ratingCount" class="sapUiTinyMarginTop"
+						text="{path: 'RatingCount', type : 'sap.ui.model.type.Float', constraints : { minimum: 0, maximum: 9999999999 }, formatOptions: { parseAsString: true, maxIntegerDigits: 10, maxFractionDigits: 0 }, formatter: '.formatter.ratingNumber'}"/>
+				</l:HorizontalLayout>
+			</l:VerticalLayout>
+		</content>
+	</Popover>
+</core:FragmentDefinition>

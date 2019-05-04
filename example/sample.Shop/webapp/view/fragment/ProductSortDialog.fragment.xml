@@ -1,0 +1,13 @@
+<core:FragmentDefinition id="productSortDialogFragment" xmlns:core="sap.ui.core" xmlns="sap.m">
+	<ViewSettingsDialog confirm="onSortDialogConfirmed" id="sortingViewSettingsDialog">
+		<sortItems>
+			<ViewSettingsItem id="productNameSorter" key="Name" selected="true" text="{/#Product/Name/@sap:label}"/>
+			<ViewSettingsItem id="priceSorter" key="Price" text="{/#Product/Price/@sap:label}"/>
+			<ViewSettingsItem id="mainCategorySorter" key="MainCategoryName" text="{/#Product/MainCategoryName/@sap:label}"/>
+			<ViewSettingsItem id="subCategorySorter" key="SubCategoryName" text="{/#Product/SubCategoryName/@sap:label}"/>
+			<ViewSettingsItem id="quantitySorter" key="StockQuantity" text="{/#Product/StockQuantity/@sap:label}"/>
+			<ViewSettingsItem id="ratingSorter" key="AverageRating" text="{/#Product/AverageRating/@sap:label}"/>
+			<ViewSettingsItem id="supplierSorter" key="SupplierName" text="{/#Product/SupplierName/@sap:label}"/>
+		</sortItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

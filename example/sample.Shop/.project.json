@@ -1,0 +1,49 @@
+{
+  "mockpreview": {
+    "mockUri": "/sap/opu/odata/sap/SEPMRA_SHOP",
+    "loadCustomRequests": true,
+    "loadJSONFiles": true,
+    "metadataFilePath": "../localService/metadata.xml",
+    "mockRequestsFilePath": "../localService/MockRequests.js"
+  },
+  "hcpdeploy": {
+  	"account": "fiori",
+    "name": "nwepmrefappsshop",
+	"entryPath": "webapp"    
+  },
+  "generation": [
+    {
+      "templateId": "sap.ui.ui5-template-plugin.1worklist",
+      "templateVersion": "1.32.0",
+      "dateTimeStamp": "Thu, 13 Aug 2015 11:20:17 GMT"
+    }
+  ],
+  "translation": {
+    "translationDomain": "BC",
+    "supportedLanguages": "en",
+    "defaultLanguage": "en",
+    "defaultI18NPropertyFile": "i18n.properties",
+    "resourceModelName": "i18n"
+  },
+  "appparams": [
+    {
+      "paramName": "sap-ui-xx-lesssupport",
+      "paramValue": "true",
+      "paramActive": true
+    }
+  ],
+  "basevalidator": {
+    "validators": [
+      {
+        "validatorID": "fioriJsValidator"
+      },
+      {
+        "validatorID": "fioriXmlAnalysis"
+      }
+    ],
+    "services": {
+      "js": "fioriJsValidator",
+      "xml": "fioriXmlAnalysis"
+    }
+  }
+}

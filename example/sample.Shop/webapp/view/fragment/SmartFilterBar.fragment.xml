@@ -1,0 +1,55 @@
+<core:FragmentDefinition id="smartFilterBarFragmentxx" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core"
+	xmlns:sfb="sap.ui.comp.smartfilterbar">
+	<sfb:SmartFilterBar id="smartFilterBar" entityType="Product" smartVariant="smartVariant" reset="onSFBResetPressed"
+		beforeVariantFetch="onSFBbeforeVariantFetch" afterVariantLoad="onSFBVariantLoaded" showGoOnFB="true" filterBarExpanded="false"
+		filterChange="onSFBFilterChange" persistencyKey="nw.epm.refapps.shop.variants" enableBasicSearch="true" search="onSearchPressed"
+		useToolbar="false">
+		<sfb:controlConfiguration id="filterBarControlConfiguration">
+			<!-- suppress entry in the Add Filter dialog -->
+			<sfb:ControlConfiguration id="subCategoryMainCategoryIdControlConfiguration" key="SubCategory.MainCategoryId" visible="false"/>
+			<sfb:ControlConfiguration id="subCategoryMainCategoryNameControlConfiguration" key="SubCategory.MainCategoryName" visible="false"/>
+			<sfb:ControlConfiguration id="subCategorySubCategoryNameControlConfiguration" key="SubCategory.Name" visible="false"/>
+			<sfb:ControlConfiguration id="subCategorySubCategoryIdControlConfiguration" key="SubCategory.Id" visible="false"/>
+			<sfb:ControlConfiguration id="subCategoryNameControlConfiguration" key="SubCategoryName" visible="false"/>
+			<sfb:ControlConfiguration id="subCategoryIdControlConfiguration" key="SubCategoryId" visible="false"/>
+			<sfb:ControlConfiguration id="supplierNameControlConfiguration" key="SupplierName" visible="false"/>
+			<sfb:ControlConfiguration id="supplierIdControlConfiguration" key="SupplierId" visible="false"/>
+			<sfb:ControlConfiguration id="quantityUnitControlConfiguration" key="QuantityUnit" visible="false"/>
+			<sfb:ControlConfiguration id="measureUnitControlConfiguration" key="MeasureUnit" visible="false"/>
+			<sfb:ControlConfiguration id="favoriteOfCurrentUserControlConfiguration" key="IsFavoriteOfCurrentUser" visible="false"/>
+			<sfb:ControlConfiguration id="productNameControlConfiguration" key="Name" visible="false"/>
+			<sfb:ControlConfiguration id="ratingCountControlConfiguration" key="RatingCount" visible="false"/>
+			<sfb:ControlConfiguration id="imageUrlControlConfiguration" key="ImageUrl" visible="false"/>
+			<sfb:ControlConfiguration id="productIdControlConfiguration" key="Id" visible="false"/>
+			<sfb:ControlConfiguration id="weightMeasureControlConfiguration" key="WeightMeasure" visible="false"/>
+			<sfb:ControlConfiguration id="weightUnitControlConfiguration" key="WeightUnit" visible="false"/>
+			<sfb:ControlConfiguration id="dimensionHeightControlConfiguration" key="DimensionHeight" visible="false"/>
+			<sfb:ControlConfiguration id="dimensionWidthControlConfiguration" key="DimensionWidth" visible="false"/>
+			<sfb:ControlConfiguration id="dimensionDepthControlConfiguration" key="DimensionDepth" visible="false"/>
+			<sfb:ControlConfiguration id="dimensionUnitControlConfiguration" key="DimensionUnit" visible="false"/>
+			<sfb:ControlConfiguration id="lastModifiedControlConfiguration" key="LastModified" visible="false"/>
+			<sfb:ControlConfiguration id="reviewOfCurrentUserControlConfiguration" key="HasReviewOfCurrentUser" visible="false"/>
+			<sfb:ControlConfiguration id="mainCategoryNameControlConfiguration" key="MainCategoryName" visible="false"/>
+			<sfb:ControlConfiguration id="stockQuantityControlConfiguration" key="StockQuantity" visible="false"/>
+			<!-- add controls to be visible in the SmartFilterBar automatically or 
+				to use a different control type -->
+			<sfb:ControlConfiguration id="mainCategoryIdControlConfiguration" controlType="dropDownList"
+				preventInitialDataFetchInValueHelpDialog="false" key="MainCategoryId" visibleInAdvancedArea="true" index="1"/>
+			<sfb:ControlConfiguration id="priceControlConfiguration" preventInitialDataFetchInValueHelpDialog="false" key="Price"
+				visibleInAdvancedArea="true" index="3"/>
+			<!-- add a custom control (can be added via Add Filter dialog) -->
+			<sfb:ControlConfiguration id="averageRating" key="AverageRating" label="{/#Product/AverageRating/@sap:label}" visibleInAdvancedArea="true"
+				index="2">
+				<sfb:customControl id="filterBarCustomControl">
+					<MultiComboBox id="averageRatingComboBox" selectionChange="onCustomFilterChange" ariaLabelledBy="averageRating">
+						<core:Item id="fourStars" key="4" text="{i18n>xfld.fourStars}"/>
+						<core:Item id="threeStars" key="3" text="{i18n>xfld.threeStars}"/>
+						<core:Item id="twoStars" key="2" text="{i18n>xfld.twoStars}"/>
+						<core:Item id="oneStar" key="1" text="{i18n>xfld.oneStar}"/>
+						<core:Item id="noStars" key="0" text="{i18n>xfld.noStars}"/>
+					</MultiComboBox>
+				</sfb:customControl>
+			</sfb:ControlConfiguration>
+		</sfb:controlConfiguration>
+	</sfb:SmartFilterBar>
+</core:FragmentDefinition>

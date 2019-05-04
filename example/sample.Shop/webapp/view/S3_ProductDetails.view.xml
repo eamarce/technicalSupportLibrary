@@ -1,0 +1,4 @@
+<mvc:View id="S3_ProductDetailsView" controllerName="nw.epm.refapps.shop.controller.S3_ProductDetails"  xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc" xmlns:sfi="sap.ui.comp.smartfield" xmlns:uxap="sap.uxap" xmlns="sap.m">
+	<core:Fragment fragmentName="nw.epm.refapps.shop.view.fragment.ProductDetails" type="XML"/>
+</mvc:View>

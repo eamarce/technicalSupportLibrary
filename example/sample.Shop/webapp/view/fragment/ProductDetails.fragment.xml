@@ -1,0 +1,166 @@
+<core:FragmentDefinition id="productDetailFragment" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:uxap="sap.uxap" xmlns="sap.m"
+	xmlns:productDetail="nw.epm.refapps.shop.block.productDetails" xmlns:messageStrip="nw.epm.refapps.shop.block.messageStrip">
+	<uxap:ObjectPageLayout id="productObjectPageLayout" enableLazyLoading="false" showHeaderContent="true" showTitleInHeaderContent="false"
+		useTwoColumnsForLargeScreen="false" upperCaseAnchorBar="false">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader id="productDetailsHeader" markFavorite="{IsFavoriteOfCurrentUser}" objectImageShape="Square"
+				objectImageURI="{ImageUrl}" objectSubtitle="{Id}" objectTitle="{Name}" showMarkers="true">
+				<uxap:actions>
+					<uxap:ObjectPageHeaderActionButton id="productDetailsAddToCartButton" hideText="false" importance="High" press="onAddToCartPressed"
+						text="{i18n>xbut.addToCart}" type="Emphasized"/>
+					<uxap:ObjectPageHeaderActionButton id="reviewButton" hideText="false" importance="Medium" press="onEditReviewPressed"
+						text="{= ${HasReviewOfCurrentUser} ? ${i18n>xbut.myReview} : ${i18n>xbut.writeReview} }"/>
+					<uxap:ObjectPageHeaderActionButton id="productDetailsFavoriteButton" icon="sap-icon://favorite" importance="Low"
+						press="onToggleFavoritePressed" text="{= ${IsFavoriteOfCurrentUser} ? ${i18n>xbut.removeFavorite} : ${i18n>xbut.addFavorite} }"
+						tooltip="{= ${IsFavoriteOfCurrentUser} ? ${i18n>xbut.removeFavorite} : ${i18n>xbut.addFavorite} }"/>
+					<uxap:ObjectPageHeaderActionButton id="actionSheetButton" icon="sap-icon://action" importance="High" press="onActionSheetPressed"
+						text="{i18n>xbut.share}" visible="{detailView>/actionSheetVisible}"/>
+					<uxap:ObjectPageHeaderActionButton id="productHeaderButton"
+						binding="{/ShoppingCarts(-1)}" icon="sap-icon://cart"
+						press="onShoppingCartPressed" text="{TotalQuantity}" hideText="false" importance="High" tooltip="{i18n>xfld.addToCart}"/>
+				</uxap:actions>
+			</uxap:ObjectPageHeader>
+		</uxap:headerTitle>
+		<uxap:headerContent>
+			<Image id="productImage" alt="{i18n>xfld.productImage}" height="5rem" width="5rem" press="onImagePressed" src="{ImageUrl}"
+				backgroundPosition="center center" backgroundSize="contain" mode="Background"/>
+			<l:VerticalLayout id="price">
+				<Label id="priceLabel" text="{/#Product/Price/@sap:label}"/>
+				<HBox alignItems="Center">
+					<ObjectNumber id="priceNumber"
+						number="{parts: [ {path: 'Price'}, {path: 'CurrencyCode'}], type : 'sap.ui.model.type.Currency', formatOptions: { showMeasure: false } }"/>
+					<ObjectNumber id="currencyUnit" unit="{CurrencyCode}"/>
+				</HBox>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="availability">
+				<Label id="availabilityLabel" text="{/#Product/StockQuantity/@sap:label}"/>
+				<ObjectStatus id="availabilityStatus" state="{path: 'StockQuantity', formatter: '.formatterReuse.formatAvailabilityStatus'}"
+					text="{path: 'StockQuantity', formatter: '.formatterReuse.formatAvailabilityText'}"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="totalItems">
+				<Label id="generalInformation" text="{i18n>xtit.generalInformation}"/>
+				<ObjectAttribute id="categoryAttribute" text="{MainCategoryName}" title="{/#Product/MainCategoryName/@sap:label}"/>
+				<ObjectAttribute id="subCategoryAttribute" text="{SubCategoryName}" title="{/#Product/SubCategoryName/@sap:label}"/>
+				<HBox alignItems="Center">
+					<ObjectAttribute id="supplieryAttribute" title="{/#Product/SupplierId/@sap:label}" class="sapUiTinyMarginEnd"/>
+					<Link class="sapUiForceWidthAuto" id="supplierLink" press="onSupplierPressed" text="{SupplierName}"/>
+				</HBox>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="productDescription">
+				<Label id="productDescriptionLabel" text="{/#Product/Description/@sap:label}"/>
+				<Text id="descriptionText" text="{Description}" width="15rem"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="rating">
+				<Text id="ratingText" text="{/#Product/AverageRating/@sap:label}"/>
+				<RatingIndicator id="productRatingIndicator" value="{path: 'AverageRating', formatter: '.formatter.floatParser'}" enabled="false"/>
+				<Link id="ratingPopoverLink" press="onRatingPressed"
+					text="{parts:[{path: 'i18n>xfld.ratingCount'}, {path: 'RatingCount'}], formatter: 'jQuery.sap.formatMessage'}"/>
+			</l:VerticalLayout>
+			<!--Allow adding fields after the object header -->
+			<core:ExtensionPoint name="extensionAfterObjectHeader"/>
+		</uxap:headerContent>
+		<uxap:sections>
+			<uxap:ObjectPageSection id="productInformationSection" title="{i18n>xtit.productInformation}" titleUppercase="false">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection id="productInformationSubSection" mode="Collapsed">
+						<uxap:blocks>
+							<!--MessageStrip displayed if product is out of stock or only a few left-->
+							<MessageStrip id="productMessageStrip" showIcon="true" showCloseButton="true"
+								text="{= ${StockQuantity} &lt; 1 ? ${i18n>ymsg.oufOfStockInfo} : ${i18n>ymsg.fewLeftOnStockInfo} }"
+								type="{= ${StockQuantity} &lt; 1 ? 'Error' : 'Warning' }" visible="{=${StockQuantity} !== null &amp;&amp; ${StockQuantity} &lt; 10}"/>
+						</uxap:blocks>
+						<uxap:blocks>
+							<!--Form for Product Details -->
+							<l:VerticalLayout id="productInformation">
+								<f:SimpleForm id="productInformationForm" columnsL="1" columnsM="1" editable="false" emptySpanL="0" emptySpanM="0" labelSpanL="2"
+									labelSpanM="2" layout="ResponsiveGridLayout" maxContainerCols="2" ariaLabelledBy="productInformationSection">
+									<f:content>
+										<Label id="depthLabel"
+											text="{parts:[{path: 'i18n>xtit.productSize'}, {path: '/#Product/DimensionHeight/@sap:label'}, {path: '/#Product/DimensionWidth/@sap:label'}, {path: '/#Product/DimensionDepth/@sap:label'}], formatter: 'jQuery.sap.formatMessage'}"/>
+										<Text id="depthText"
+											text="{parts:[{path: 'i18n>xfld.productSize' }, {path: 'DimensionHeight', type: 'sap.ui.model.type.Float', formatOptions: {style: 'long' }}, {path: 'DimensionWidth', type: 'sap.ui.model.type.Float', formatOptions: {style: 'long' }}, {path: 'DimensionDepth', type: 'sap.ui.model.type.Float', formatOptions: {style: 'long' }}, {path: 'DimensionUnit' }], formatter: 'jQuery.sap.formatMessage' }"/>
+										<Label id="weightLabel" text="{/#Product/WeightMeasure/@sap:label}"/>
+										<Text id="weightText"
+											text="{parts:[{path: 'WeightMeasure', type: 'sap.ui.model.type.Float', formatOptions: {style: 'long'}}, {path: 'WeightUnit'}], formatter: '.formatterReuse.formatMeasure' }"/>
+										<!--Allow adding fields in the product details section -->
+										<core:ExtensionPoint name="extensionForm"/>
+									</f:content>
+								</f:SimpleForm>
+							</l:VerticalLayout>
+							<!--Allow adding fields after the product details section -->
+							<core:ExtensionPoint name="extensionAfterForm"/>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection id="reviewSection" title="{i18n>xtit.reviews}" titleUppercase="false">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection id="reviewSubSection">
+						<uxap:blocks>
+							<!--Review Table -->
+							<Table id="reviewTable" growing="true" growingScrollToLoad="true" noDataText="{i18n>xfld.noDataReviews}"
+								items="{path: 'Reviews', templateShareable: false, sorter: {path: 'ChangedAt', descending: 'true'}, events: { change: '.onReviewTableChange'}, groupId: 'reviews'}"
+								class="sapUiForceWidthAuto sapUiResponsiveMargin" width="auto" ariaLabelledBy="reviewSection">
+								<headerToolbar>
+									<Toolbar id="tableHeaderBar">
+										<ToolbarSpacer/>
+										<Button icon="sap-icon://sort" id="settingsButton" press="onTableSettingsPressed" tooltip="{i18n>xbut.sort}"/>
+									</Toolbar>
+								</headerToolbar>
+								<columns>
+									<!--Rating Indicator -->
+									<Column demandPopin="true" hAlign="Left" id="ratingIndicatorColumn" minScreenWidth="Desktop" popinDisplay="Inline" vAlign="Top" width="6rem"
+										class="sapMTableContentMargin">
+										<header>
+											<Label id="ratingIndicatorLabel" text="{/#Review/Rating/@sap:label}"/>
+										</header>
+									</Column>
+									<!--Name and Date -->
+									<Column id="nameAndDateColumn" demandPopin="true" hAlign="Left" minScreenWidth="Tablet" vAlign="Top" width="8rem"
+										class="sapMTableContentMargin"/>
+									<!--Comment -->
+									<Column demandPopin="true" hAlign="Left" id="commentColumn" vAlign="Top" class="sapMTableContentMargin">
+										<header>
+											<Label id="commentLabel" text="{i18n>xfld.review}"/>
+										</header>
+									</Column>
+									<!--Links for Helpful, Edit and Delete -->
+									<Column demandPopin="true" hAlign="Left" id="linksColumn" minScreenWidth="Tablet" vAlign="Top" width="8rem" class="sapMTableContentMargin"/>
+								</columns>
+								<ColumnListItem id="reviewListItem">
+									<cells >
+										<!--Rating Indicator -->
+										<RatingIndicator id="ratingIndicatorControl" enabled="false" iconSize='0.875rem' maxValue="5" value="{Rating}"/>
+										<!--Name and Date -->
+										<ObjectIdentifier id="nameAndDateObjIdentifier"
+											text="{path:'ChangedAt', type:'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, parseAsString: true} }"
+											title="{=${IsReviewOfCurrentUser} ? ${i18n>xfld.me} : ${UserDisplayName} }"/>
+										<!--Comment -->
+										<Text id="commentText" text="{Comment}"/>
+										<!--Links for Helpful, Edit and Delete -->
+										<l:VerticalLayout id="linksVerticalLayout">
+											<Text id="helpfulCountText" class="sapUiTinyMarginBottom"
+												text="{parts:[{path: 'i18n>xfld.helpfulCount' }, {path: '/#Review/HelpfulForCurrentUser/@sap:label' }, {path: 'HelpfulCount' }], formatter: 'jQuery.sap.formatMessage' }"/>
+											<l:HorizontalLayout id="linksHorizontalLayout">
+												<!--Rate as Helpful -->
+												<Link class="sapUiLargeMarginEnd" id="helpfulLink" press="onRateAsHelpfulPressed"
+													text="{=!${HelpfulForCurrentUser} ? ${i18n>xlnk.rateAsHelpful} : ${i18n>xlnk.undoAsHelpful} }" visible="{=!${IsReviewOfCurrentUser} }"/>
+												<!--Edit -->
+												<Link class="sapUiSmallMarginEnd" id="editReviewLink" press="onEditReviewLinkPressed" text="{i18n>xlnk.editReview}"
+													visible="{IsReviewOfCurrentUser}"/>
+												<!--Delete -->
+												<Link class="sapUiLargeMarginEnd" id="deleteReviewLink" press="onDeleteReviewLinkPressed" text="{i18n>xlnk.deleteReview}"
+													visible="{IsReviewOfCurrentUser}"/>
+											</l:HorizontalLayout>
+										</l:VerticalLayout>
+									</cells>
+								</ColumnListItem>
+							</Table>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
+</core:FragmentDefinition>

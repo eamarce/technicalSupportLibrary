@@ -1,0 +1,9 @@
+<core:FragmentDefinition id="settingsDialogFragment" xmlns:core="sap.ui.core" xmlns="sap.m">
+	<ViewSettingsDialog confirm="onSortConfirmed" id="reviewSortViewSettingsDialog" sortDescending="true">
+		<!--Sort Rating -->
+		<sortItems>
+			<ViewSettingsItem id="changedAtSorter" key="ChangedAt" selected="true" text="{/#Review/ChangedAt/@sap:label}"/>
+			<ViewSettingsItem id="reviewRatingSorter" key="Rating" text="{/#Review/Rating/@sap:label}"/>
+		</sortItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>
